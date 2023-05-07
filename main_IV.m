@@ -176,3 +176,4 @@ set(gca,'yscale','log');
 hold off;
 
 test = 'test';
+test2 = 'test2';
