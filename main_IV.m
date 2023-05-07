@@ -174,3 +174,5 @@ ylabel('current density  / A{m^{-2}} ');
 %this plots the current on a logarithmic scale
 set(gca,'yscale','log');
 hold off;
+
+test = 'test';
