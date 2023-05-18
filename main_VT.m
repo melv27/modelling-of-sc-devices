@@ -24,7 +24,7 @@ close all;
 T0       = 300;     % [K]
 
 % provide a reference current
-current_ref_value = 3.83; % [A/m2] here 100mA/m^2
+current_ref_value = 2.51e-2; % [A/m2] here 100mA/m^2
 
 %secs1d_silicon_material_properties;
 device.material = silicon_material_properties(T0);
