@@ -12,7 +12,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear all;
-%close all;
+close all;
 
 %%----- SETUP SIMULATION -----------------------------------------------------
 
@@ -25,7 +25,7 @@ device.material = silicon_material_properties(T0);
 % physical constants and parameters
 secs1d_physical_constants;
 
-device.doping.NA = 5E23; % [m^3]
+device.doping.NA = 1E14; % [m^3] 5E23
 device.doping.ND = 1E23; % [m^3]
 
 % set device geometry
@@ -58,7 +58,7 @@ itercontrol.prev_guess = false;
 % set external voltage here!
 voltage_step = 0.01;      %[V] 
 voltage_start = -0.2;     %[V]
-voltage_end = 1.2; %[V]
+voltage_end = 1.0; %[V]
 
 number_voltages = floor((voltage_end-voltage_start)/voltage_step)+1;
 
@@ -98,7 +98,7 @@ figure(1)
 scale = 1;
 plot2micron = 1E6; % scale from meter to micrometer
 set(1,'Position', [13 500 435 320]);
-title({'energy and potential profiles @ T= ',num2str(T0)}); 
+title({['Energy and potential profiles'],['@ T= ',num2str(T0)]}); 
 hold on;
 plot(device.mesh.x*plot2micron, profile.psi, 'LineWidth',2,...
      'Color', [0.5*scale 0.2*scale 0]); 
@@ -117,54 +117,58 @@ legend(['{\Psi} /V'],['{E_{F,n}} /eV'],['{E_{F,p}} /eV'],...
 my_legend = legend;
 my_legend.Location = 'northeastoutside';    
 axis tight;
+saveas(figure(1),['plots','/pn_jn_NA',num2str(device.doping.NA),'.png']);
 hold off;
 
 figure(2)
 scale = 1;
 plot2micron = 1E6; % scale from meter to micrometer
 set(2,'Position', [13 100 435 320]);
-
+%hold on;
 semilogy(device.mesh.x*plot2micron, profile.n, 'LineWidth',2,...
      'Color', [0 0 1]); 
-title({'charge density profiles @ T= ',num2str(T0)}); 
-hold off;
+title({['Charge density profiles'],['@ T= ',num2str(T0)]}); 
 xlabel('position / {\mu m}');
 ylabel('density / {m^{-3}} '); 
 legend('n');
 my_legend = legend;
 my_legend.Location = 'northeastoutside';    
 axis tight;
-hold on;
+saveas(figure(2),['plots','/n_profiles_NA',num2str(device.doping.NA),'.png']);
+%hold off;
 
 figure(3)
 scale = 1;
 plot2micron = 1E6; % scale from meter to micrometer
 set(3,'Position', [500 100 435 320]);
+%hold on
 semilogy(device.mesh.x*plot2micron, profile.p,  'LineWidth',2,'Color',...
       [1 0 0]);
-title({'charge density profiles @ T= ',num2str(T0)}); 
+title({['Charge density profiles'],['@ T= ',num2str(T0)]}); 
 xlabel('position / {\mu m}');
 ylabel('density / {m^{-3}} '); 
 legend('p');
 my_legend = legend;
 my_legend.Location = 'northeastoutside';    
 axis tight;
-
+saveas(figure(3),['plots','/p_profiles_NA',num2str(device.doping.NA),'.png']);
+%hold off
 
 figure(4)
 set(4,'Position', [1000 500 435 320]);
-title({'current density vs voltage @ T= ',num2str(T0),' K'}); 
+title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
 hold on;
 plot(voltage_ramp, abs(current_ramp))
 legend ('Jtot' );
 xlabel('voltage  / V');
 ylabel('current density  / A{m^{-2}} '); 
 axis tight;
+saveas(figure(4),['plots','/current_density_NA',num2str(device.doping.NA),'.png']);
 hold off;
 
 figure(5)
 set(5,'Position', [500 500 435 320]);
-title({'current density vs voltage @ T= ',num2str(T0),' K'}); 
+title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
 hold on;
 plot(voltage_ramp, abs(current_ramp),'LineWidth',3);
 scatter(voltage_ramp, abs(current_ramp));
@@ -173,8 +177,5 @@ xlabel('voltage  / V');
 ylabel('current density  / A{m^{-2}} '); 
 %this plots the current on a logarithmic scale
 set(gca,'yscale','log');
+saveas(figure(5),['plots','/current_density_log_NA',num2str(device.doping.NA),'.png']);
 hold off;
-
-test = 'test';
-test2 = 'test2';
-test3 = 'test3';
