@@ -24,7 +24,7 @@ close all;
 T0       = 300;     % [K]
 
 % provide a reference current
-current_ref_value = 2.51E-2; % [A/m2] here 100mA/m^2
+current_ref_value = 3.83; % [A/m2] here 100mA/m^2
 
 %secs1d_silicon_material_properties;
 device.material = silicon_material_properties(T0);
@@ -129,7 +129,7 @@ for T_count=1:length(temperatures)
         my_legend = legend;
         my_legend.Location = 'northeastoutside';    
         axis tight;
-        saveas(figure(1),['plots','/potenergyprofile',num2str(current_ref_value),'.png']);
+        saveas(figure(1),['plots','/potenergyprofile',num2str(current_ref_value),'Tcount',num2str(T_count),'.png']);
         hold off;
         
     figure(3)
@@ -146,7 +146,7 @@ for T_count=1:length(temperatures)
         legend(['n / m{^{-3}}'],['p / m{^{-3}}']) 
         my_legend = legend;
         my_legend.Location = 'northeastoutside';
-        saveas(figure(3),['plots','/carrierdensityprofile',num2str(current_ref_value),'.png']);
+        saveas(figure(3),['plots','/carrierdensityprofile',num2str(current_ref_value),'Tcount',num2str(T_count),'.png']);
         hold off;
     end; % if 
 end % for temperatures T
