@@ -24,7 +24,7 @@ close all;
 T0       = 300;     % [K]
 
 % provide a reference current
-current_ref_value = 1E-5; % [A/m2] here 100mA/m^2
+current_ref_value = 2.51E-2; % [A/m2] here 100mA/m^2
 
 %secs1d_silicon_material_properties;
 device.material = silicon_material_properties(T0);
@@ -32,12 +32,12 @@ device.material = silicon_material_properties(T0);
 % physical constants and parameters
 secs1d_physical_constants;
 
-device.doping.NA = 1E23; % [m^3]
-device.doping.ND = 5E23; % [m^3]
+device.doping.NA = 5E17; % [m^3]
+device.doping.ND = 1E17; % [m^3]
 
 % set device geometry
-device.geometry.length         = 12e-6; % [m]
-device.geometry.p_layer_length = 6e-6;  % [m]
+device.geometry.length         = 50e-6; % [m]
+device.geometry.p_layer_length = 25e-6;  % [m]
 
 % set device mesh
 
@@ -80,7 +80,7 @@ end;
 
 current_diff = get_currentdiff(current_ref_value,V_applied,T0,device,itercontrol);
 
-temperatures = linspace(300,400,100);
+temperatures = linspace(200,400,201);
 target_voltages = zeros(length(temperatures),1);
 
 for T_count=1:length(temperatures)
