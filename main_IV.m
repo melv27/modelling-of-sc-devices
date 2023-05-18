@@ -25,8 +25,8 @@ device.material = silicon_material_properties(T0);
 % physical constants and parameters
 secs1d_physical_constants;
 
-device.doping.NA = 1E14; % [m^3] 5E23
-device.doping.ND = 1E23; % [m^3]
+device.doping.NA = 5E17; % [m^3]
+device.doping.ND = 1E17; % [m^3]
 
 % set device geometry
 device.geometry.length         = 50e-6; % [m]
