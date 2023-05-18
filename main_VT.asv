@@ -159,11 +159,11 @@ slope = dV./dT;
 
 figure(5)
 set(5,'Position', [13 200 435 320]);
+title({'Voltage vs temperature in Si at given j_{ref}' }); 
 plot(temperatures, target_voltages,'LineWidth',1,'Color',...
          [1 0 0],'DisplayName',...
          ['Voltage @ ',num2str(current_ref_value),' A/m^{2}']);   
-hold on;
-title({'Voltage vs temperature in Si at given j_{ref}' }); 
+hold on;  
 %ylim([min(voltage_int) max(voltage_int)]);
 xlabel('temperature / K');
 ylabel('voltage / V');
@@ -172,10 +172,10 @@ saveas(figure(5),['plots','/VT',num2str(current_ref_value),'.png']);
 
 figure(6)
 set(6,'Position', [490 200 435 320]);
+title({'Slope dV/dT vs temperature in Si at given j_{ref}' });
 plot(temperatures(2:end), slope,'LineWidth',1,'Color',...
          [0.8 0 0]); 
 hold on;
-title({'Slope dV/dT vs temperature in Si at given j_{ref}' });
 legend(['slope @ ',num2str(current_ref_value),' A/m^{2}']);
 xlabel('temperature / K');
 ylabel('dV/dT / V/K');
