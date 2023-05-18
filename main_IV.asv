@@ -58,7 +58,7 @@ itercontrol.prev_guess = false;
 % set external voltage here!
 voltage_step = 0.01;      %[V] 
 voltage_start = -0.2;     %[V]
-voltage_end = 1.2; %[V]
+voltage_end = 1.0; %[V]
 
 number_voltages = floor((voltage_end-voltage_start)/voltage_step)+1;
 
@@ -117,7 +117,7 @@ legend(['{\Psi} /V'],['{E_{F,n}} /eV'],['{E_{F,p}} /eV'],...
 my_legend = legend;
 my_legend.Location = 'northeastoutside';    
 axis tight;
-saveas(figure(1),['plots','/pn_jn_NA',num2str(device.doping.NA),'exc1_inf.png']);
+saveas(figure(1),['plots','/pn_jn_NA',num2str(device.doping.NA),'exc1.png']);
 hold off;
 
 figure(2)
@@ -134,7 +134,7 @@ legend('n');
 my_legend = legend;
 my_legend.Location = 'northeastoutside';    
 axis tight;
-saveas(figure(2),['plots','/n_profiles_NA',num2str(device.doping.NA),'exc1_inf.png']);
+saveas(figure(2),['plots','/n_profiles_NA',num2str(device.doping.NA),'exc1.png']);
 %hold off;
 
 figure(3)
@@ -151,7 +151,7 @@ legend('p');
 my_legend = legend;
 my_legend.Location = 'northeastoutside';    
 axis tight;
-saveas(figure(3),['plots','/p_profiles_NA',num2str(device.doping.NA),'exc1_inf.png']);
+saveas(figure(3),['plots','/p_profiles_NA',num2str(device.doping.NA),'exc1.png']);
 %hold off
 
 figure(4)
@@ -163,7 +163,7 @@ legend ('Jtot' );
 xlabel('voltage  / V');
 ylabel('current density  / A{m^{-2}} '); 
 axis tight;
-saveas(figure(4),['plots','/current_density_NA',num2str(device.doping.NA),'exc1_inf.png']);
+saveas(figure(4),['plots','/current_density_NA',num2str(device.doping.NA),'exc1.png']);
 hold off;
 
 figure(5)
@@ -177,5 +177,5 @@ xlabel('voltage  / V');
 ylabel('current density  / A{m^{-2}} '); 
 %this plots the current on a logarithmic scale
 set(gca,'yscale','log');
-saveas(figure(5),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1_inf.png']);
+saveas(figure(5),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1.png']);
 hold off;
