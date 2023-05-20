@@ -75,6 +75,12 @@ end;
 current_ramp = zeros(1,length(voltage_ramp));
 Efield_data = nan(device.mesh.Nelements,2); % dummy matrix to save electric field data in for plotting
 potential_data = nan(device.mesh.Nelements+1,2); % same as Efield_data but for the potential
+n_data = nan(device.mesh.Nelements+1,2); % same for n charge carrier density
+p_data = nan(device.mesh.Nelements+1,2); % same for p charge carrier density
+EFn_data = nan(device.mesh.Nelements+1,2); % fermi level in n-doped region
+EFp_data = nan(device.mesh.Nelements+1,2); % fermi level in p-doped region
+Ec_data = nan(device.mesh.Nelements+1,2); % conduction band
+Ev_data = nan(device.mesh.Nelements+1,2); % valence band
 
 
 % as the current might be very small for small voltages, it is useful to calculate
@@ -100,72 +106,104 @@ for bias_voltage_num = length(voltage_ramp):-1:1
     if length(voltage_ramp) == 2
         Efield_data(:,bias_voltage_num) = profile.efield;
         potential_data(:,bias_voltage_num) = profile.psi;
+        n_data(:,bias_voltage_num) = profile.n;
+        p_data(:,bias_voltage_num) = profile.p;
+        EFn_data(:,bias_voltage_num) = profile.EFn;
+        EFp_data(:,bias_voltage_num) = profile.EFp;
+        Ec_data(:,bias_voltage_num) = profile.Ec;
+        Ev_data(:,bias_voltage_num) = profile.Ev;
     end;
+end;
 
+
+
+% for the sake of comparing two different voltages, all plots except for
+% J-V curves are only plotted if exactly 2 voltage values are used in the
+% voltage_ramp vector
+
+if length(voltage_ramp) == 2
+    for i = length(voltage_ramp):-1:1
+        label = ['V= ', num2str(voltage_ramp(i)), ' V'];
+        
+        figure(i)
+        scale = 1;
+        plot2micron = 1E6; % scale from meter to micrometer
+        set(i,'Position', [13 100 435 320]);
+        hold on;
+        semilogy(device.mesh.x*plot2micron, n_data(:,i), 'LineWidth',2,...
+             'Color', [0 0 1], 'DisplayName', 'n'); 
+        semilogy(device.mesh.x*plot2micron, p_data(:,i), 'LineWidth',2,...
+             'Color', [1 0 0], 'DisplayName', 'p');
+        title({['Charge density profiles'],['@ T= ',num2str(T0), ' K', ' and V=', ...
+            num2str(voltage_ramp(i)), ' V']}); 
+        xlabel('position / {\mu m}');
+        ylabel('density / {m^{-3}} '); 
+        %legend('n');
+        %my_legend = legend;
+        %my_legend.Location = 'northeastoutside';    
+        axis tight;
+        saveas(figure(i),['plots','/charge_density_profiles_V',num2str(voltage_ramp(1)),...
+            '_NA',num2str(device.doping.NA),'.png']);
+        hold off;
+        %legend.location = 'northeastoutside';
+        legend show
+        
+        figure(i+length(voltage_ramp))
+        set(i+length(voltage_ramp),'Position', [13 500 435 320]);
+        title({['Energy level diagram'],['@ T= ',num2str(T0), ' K', ' and V=', ...
+            num2str(voltage_ramp(i)), ' V']}); 
+        hold on;
+        plot(device.mesh.x*plot2micron, EFn_data(:,i),  'LineWidth',2,'Color',...
+              [0 0 scale]);
+        plot(device.mesh.x*plot2micron, EFp_data(:,i), 'LineWidth',2,'Color',...
+              [scale 0 0]);
+        plot(device.mesh.x*plot2micron, Ec_data(:,i), 'LineWidth',1,'Color',...
+              [0 0 scale]);
+        plot(device.mesh.x*plot2micron, Ev_data(:,i), 'LineWidth',1,'Color',...
+              [scale 0 0]);
+        xlabel('position / {\mu m}');
+        ylabel('potential or energy'); 
+        legend(['{E_{F,n}} /eV'],['{E_{F,p}} /eV'],...
+               ['{E_{C}} /eV'],['{E_{V}} /eV'])
+        my_legend = legend;
+        my_legend.Location = 'northeastoutside';    
+        axis tight;
+        saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',...
+            num2str(voltage_ramp(1)),'_NA',num2str(device.doping.NA),'.png']);
+        hold off;
+        
+        figure(5)
+        set(5,'Position', [1000 500 435 320]);
+        title({['Electric field vs position'],['@ T= ',num2str(T0),' K']}); 
+        hold on;
+        plot(device.mesh.x(1:1000)*plot2micron, Efield_data(:,i),  'LineWidth',2,'DisplayName', label)
+        %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
+        xlabel('position / {\mu m}');
+        ylabel('electric field / V/m '); 
+        axis tight;
+        saveas(figure(5),['plots','/Efield_V',num2str(voltage_ramp(1)),'_NA',...
+            num2str(device.doping.NA),'.png']);
+        hold off;
+        legend show
+        
+        figure(6)
+        set(6,'Position', [1000 500 435 320]);
+        title({['Electrostatic potential vs position'],['@ T= ',num2str(T0),' K']}); 
+        hold on;
+        plot(device.mesh.x*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label)
+        %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
+        xlabel('position / {\mu m}');
+        ylabel('electrostatic potential / V '); 
+        axis tight;
+        saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(1)),'_NA',...
+            num2str(device.doping.NA),'.png']);
+        hold off;
+        legend show
+    end
 end
 
-figure(1)
-scale = 1;
-plot2micron = 1E6; % scale from meter to micrometer
-set(1,'Position', [13 500 435 320]);
-title({['Energy and potential profiles'],['@ T= ',num2str(T0)]}); 
-hold on;
-plot(device.mesh.x*plot2micron, profile.psi, 'LineWidth',2,...
-     'Color', [0.5*scale 0.2*scale 0]); 
-plot(device.mesh.x*plot2micron, profile.EFn,  'LineWidth',2,'Color',...
-      [0 0 scale]);
-plot(device.mesh.x*plot2micron, profile.EFp, 'LineWidth',2,'Color',...
-      [scale 0 0]);
-plot(device.mesh.x*plot2micron, profile.Ec, 'LineWidth',1,'Color',...
-      [0 0 scale]);
-plot(device.mesh.x*plot2micron, profile.Ev, 'LineWidth',1,'Color',...
-      [scale 0 0]);
-xlabel('position / {\mu m}');
-ylabel('potential or energy'); 
-legend(['{\Psi} /V'],['{E_{F,n}} /eV'],['{E_{F,p}} /eV'],...
-       ['{E_{C}} /eV'],['{E_{V}} /eV'])
-my_legend = legend;
-my_legend.Location = 'northeastoutside';    
-axis tight;
-%saveas(figure(1),['plots','/pn_jn_NA',num2str(device.doping.NA),'exc1_inf.png']);
-hold off;
-
-figure(2)
-scale = 1;
-plot2micron = 1E6; % scale from meter to micrometer
-set(2,'Position', [13 100 435 320]);
-%hold on;
-semilogy(device.mesh.x*plot2micron, profile.n, 'LineWidth',2,...
-     'Color', [0 0 1]); 
-title({['Charge density profiles'],['@ T= ',num2str(T0)]}); 
-xlabel('position / {\mu m}');
-ylabel('density / {m^{-3}} '); 
-legend('n');
-my_legend = legend;
-my_legend.Location = 'northeastoutside';    
-axis tight;
-%saveas(figure(2),['plots','/n_profiles_NA',num2str(device.doping.NA),'exc1_inf.png']);
-%hold off;
-
-figure(3)
-scale = 1;
-plot2micron = 1E6; % scale from meter to micrometer
-set(3,'Position', [500 100 435 320]);
-%hold on
-semilogy(device.mesh.x*plot2micron, profile.p,  'LineWidth',2,'Color',...
-      [1 0 0]);
-title({['Charge density profiles'],['@ T= ',num2str(T0)]}); 
-xlabel('position / {\mu m}');
-ylabel('density / {m^{-3}} '); 
-legend('p');
-my_legend = legend;
-my_legend.Location = 'northeastoutside';    
-axis tight;
-%saveas(figure(3),['plots','/p_profiles_NA',num2str(device.doping.NA),'exc1_inf.png']);
-%hold off
-
-figure(4)
-set(4,'Position', [1000 500 435 320]);
+figure(7)
+set(7,'Position', [1000 500 435 320]);
 title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
 hold on;
 plot(voltage_ramp, abs(current_ramp))
@@ -173,11 +211,11 @@ legend ('Jtot' );
 xlabel('voltage  / V');
 ylabel('current density  / A{m^{-2}} '); 
 axis tight;
-%saveas(figure(4),['plots','/current_density_NA',num2str(device.doping.NA),'exc1_inf.png']);
+%saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc1_inf.png']);
 hold off;
 
-figure(5)
-set(5,'Position', [500 500 435 320]);
+figure(8)
+set(8,'Position', [500 500 435 320]);
 title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
 hold on;
 plot(voltage_ramp, abs(current_ramp),'LineWidth',3);
@@ -187,43 +225,8 @@ xlabel('voltage  / V');
 ylabel('current density  / A{m^{-2}} '); 
 %this plots the current on a logarithmic scale
 set(gca,'yscale','log');
-%saveas(figure(5),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1_inf.png']);
+%saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1_inf.png']);
 hold off;
-
-% for the sake of comparing two different voltages, all plots except for
-% J-V curves are only plotted if exactly 2 voltage values are used in the
-% voltage_ramp vector
-
-if length(voltage_ramp) == 2
-    for i = length(voltage_ramp):-1:1
-        label = ['V= ', num2str(voltage_ramp(i)), ' V'];
-        figure(6)
-        set(6,'Position', [1000 500 435 320]);
-        title({['Electric field vs position'],['@ T= ',num2str(T0),' K']}); 
-        hold on;
-        plot(device.mesh.x(1:1000)*plot2micron, Efield_data(:,i),  'LineWidth',2,'DisplayName', label)
-        %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
-        xlabel('position / {\mu m}');
-        ylabel('electric field / V/m '); 
-        axis tight;
-        %saveas(figure(6),['plots','/Efield.png']);
-        hold off;
-        legend show
-        
-        figure(7)
-        set(7,'Position', [1000 500 435 320]);
-        title({['Electrostatic potential vs position'],['@ T= ',num2str(T0),' K']}); 
-        hold on;
-        plot(device.mesh.x*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label)
-        %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
-        xlabel('position / {\mu m}');
-        ylabel('electrostatic potential / V '); 
-        axis tight;
-        %saveas(figure(7),['plots','/potential.png']);
-        hold off;
-        legend show
-    end
-end
 
 %close all;
 %Efield_data(:,1)
