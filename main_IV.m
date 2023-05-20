@@ -142,7 +142,7 @@ if length(voltage_ramp) == 2
         %my_legend = legend;
         %my_legend.Location = 'northeastoutside';    
         axis tight;
-        saveas(figure(i),['plots','/charge_density_profiles_V',num2str(voltage_ramp(1)),...
+        saveas(figure(i),['plots','/charge_density_profiles_V',num2str(voltage_ramp(i)),...
             '_NA',num2str(device.doping.NA),'.png']);
         hold off;
         %legend.location = 'northeastoutside';
@@ -169,7 +169,7 @@ if length(voltage_ramp) == 2
         my_legend.Location = 'northeastoutside';    
         axis tight;
         saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',...
-            num2str(voltage_ramp(1)),'_NA',num2str(device.doping.NA),'.png']);
+            num2str(voltage_ramp(i)),'_NA',num2str(device.doping.NA),'.png']);
         hold off;
         
         figure(5)
@@ -181,8 +181,8 @@ if length(voltage_ramp) == 2
         xlabel('position / {\mu m}');
         ylabel('electric field / V/m '); 
         axis tight;
-        saveas(figure(5),['plots','/Efield_V',num2str(voltage_ramp(1)),'_NA',...
-            num2str(device.doping.NA),'.png']);
+    saveas(figure(5),['plots','/Efield_V',num2str(voltage_ramp(i)),'_NA',...
+        num2str(device.doping.NA),'.png']);
         hold off;
         legend show
         
@@ -195,8 +195,8 @@ if length(voltage_ramp) == 2
         xlabel('position / {\mu m}');
         ylabel('electrostatic potential / V '); 
         axis tight;
-        saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(1)),'_NA',...
-            num2str(device.doping.NA),'.png']);
+    saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(i)),'_NA',...
+        num2str(device.doping.NA),'.png']);
         hold off;
         legend show
     end
@@ -229,4 +229,3 @@ set(gca,'yscale','log');
 hold off;
 
 %close all;
-%Efield_data(:,1)
