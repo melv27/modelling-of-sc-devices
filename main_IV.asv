@@ -73,9 +73,7 @@ if (find_zero_voltage > 0)
 end;
 
 current_ramp = zeros(1,length(voltage_ramp));
-Efield_data = nan(device.mesh.Nelements,2); % dummy matrix to save electric field data in for plotting
-potential_data = nan(device.mesh.Nelements+1,2); % same as Efield_data but for the potential
-
+Efield_data = nan(device.mesh.Nelements,2);
 
 % as the current might be very small for small voltages, it is useful to calculate
 % the current for large voltage first and proceed with decreasing voltages
@@ -99,7 +97,6 @@ for bias_voltage_num = length(voltage_ramp):-1:1
     
     if length(voltage_ramp) == 2
         Efield_data(:,bias_voltage_num) = profile.efield;
-        potential_data(:,bias_voltage_num) = profile.psi;
     end;
 
 end
@@ -190,9 +187,8 @@ set(gca,'yscale','log');
 %saveas(figure(5),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1_inf.png']);
 hold off;
 
-% for the sake of comparing two different voltages, all plots except for
-% J-V curves are only plotted if exactly 2 voltage values are used in the
-% voltage_ramp vector
+% for the sake of comparing two different voltages, all plots except for J-V
+% curves are only plotted plotted 
 
 if length(voltage_ramp) == 2
     for i = length(voltage_ramp):-1:1
@@ -214,7 +210,7 @@ if length(voltage_ramp) == 2
         set(7,'Position', [1000 500 435 320]);
         title({['Electrostatic potential vs position'],['@ T= ',num2str(T0),' K']}); 
         hold on;
-        plot(device.mesh.x*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label)
+        plot(device.mesh.x(1:1000)*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label)
         %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
         xlabel('position / {\mu m}');
         ylabel('electrostatic potential / V '); 
@@ -227,3 +223,5 @@ end
 
 %close all;
 %Efield_data(:,1)
+
+
