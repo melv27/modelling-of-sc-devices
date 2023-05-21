@@ -123,7 +123,8 @@ end;
 
 if length(voltage_ramp) == 2
     for i = length(voltage_ramp):-1:1
-        label = ['V= ', num2str(voltage_ramp(i)), ' V'];
+        label1 = ['V= ', num2str(voltage_ramp(i)), ' V'];
+        label2 = ['\psi  V= ', num2str(voltage_ramp(i)), ' V'];
         
         figure(i)
         scale = 1;
@@ -131,21 +132,22 @@ if length(voltage_ramp) == 2
         set(i,'Position', [13 100 435 320]);
         hold on;
         semilogy(device.mesh.x*plot2micron, n_data(:,i), 'LineWidth',2,...
-             'Color', [0 0 1], 'DisplayName', 'n'); 
+             'Color', [0 0 1]); % 'DisplayName', 'n'
         semilogy(device.mesh.x*plot2micron, p_data(:,i), 'LineWidth',2,...
-             'Color', [1 0 0], 'DisplayName', 'p');
+             'Color', [1 0 0]);
         title({['Charge density profiles'],['@ T= ',num2str(T0), ' K', ' and V=', ...
             num2str(voltage_ramp(i)), ' V']}); 
         xlabel('position / {\mu m}');
         ylabel('density / {m^{-3}} '); 
-        %legend('n');
-        %my_legend = legend;
-        %my_legend.Location = 'northeastoutside';    
+        legend(['n'], ['p']);
+        my_legend = legend;
+        my_legend.Location = 'northeastoutside';    
         axis tight;
-        saveas(figure(i),['plots','/charge_density_profiles_NA',num2str(device.doping.NA),'.png']);
+        saveas(figure(i),['plots','/charge_density_profiles_V',num2str(voltage_ramp(i)),...
+            '_NA',num2str(device.doping.NA),'.png']);
         hold off;
         %legend.location = 'northeastoutside';
-        legend show
+        %legend show
         
         figure(i+length(voltage_ramp))
         set(i+length(voltage_ramp),'Position', [13 500 435 320]);
@@ -167,19 +169,19 @@ if length(voltage_ramp) == 2
         my_legend = legend;
         my_legend.Location = 'northeastoutside';    
         axis tight;
-        saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',num2str(voltage_ramp(1)),'_NA',num2str(device.doping.NA),'.png']);
+        saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',...
+            num2str(voltage_ramp(i)),'_NA',num2str(device.doping.NA),'.png']);
         hold off;
         
         figure(5)
         set(5,'Position', [1000 500 435 320]);
         title({['Electric field vs position'],['@ T= ',num2str(T0),' K']}); 
         hold on;
-        plot(device.mesh.x(1:1000)*plot2micron, Efield_data(:,i),  'LineWidth',2,'DisplayName', label)
+        plot(device.mesh.x(1:1000)*plot2micron, Efield_data(:,i),  'LineWidth',2,'DisplayName', label1)
         %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
         xlabel('position / {\mu m}');
         ylabel('electric field / V/m '); 
         axis tight;
-        saveas(figure(5),['plots','/Efield_V',num2str(voltage_ramp(1)),'_NA',num2str(device.doping.NA),'.png']);
         hold off;
         legend show
         
@@ -187,16 +189,20 @@ if length(voltage_ramp) == 2
         set(6,'Position', [1000 500 435 320]);
         title({['Electrostatic potential vs position'],['@ T= ',num2str(T0),' K']}); 
         hold on;
-        plot(device.mesh.x*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label)
+        plot(device.mesh.x*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label2)
         %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
         xlabel('position / {\mu m}');
         ylabel('electrostatic potential / V '); 
         axis tight;
-        saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(1)),'_NA',num2str(device.doping.NA),'.png']);
         hold off;
         legend show
     end
 end
+
+saveas(figure(5),['plots','/Efield_V',num2str(voltage_ramp(2)),'_NA',...
+    num2str(device.doping.NA),'.png']);
+saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(2)),'_NA',...
+    num2str(device.doping.NA),'.png']);
 
 figure(7)
 set(7,'Position', [1000 500 435 320]);
@@ -225,4 +231,3 @@ set(gca,'yscale','log');
 hold off;
 
 %close all;
-%Efield_data(:,1)
