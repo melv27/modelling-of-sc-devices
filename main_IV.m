@@ -25,7 +25,7 @@ device.material = silicon_material_properties(T0);
 % physical constants and parameters
 secs1d_physical_constants;
 
-device.doping.NA = 1E17; % [m^3]
+device.doping.NA = 5E17; % [m^3]
 device.doping.ND = 1E17; % [m^3]
 
 % set device geometry
@@ -65,7 +65,7 @@ number_voltages = floor((voltage_end-voltage_start)/voltage_step)+1;
 
 % this array stores all voltages for which the currents will be calculated
 %voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
-voltage_ramp = [1E-17, 0.5];
+voltage_ramp = [0, 0.1];
 
 find_zero_voltage = find(voltage_ramp == 0);
 if (find_zero_voltage > 0)
