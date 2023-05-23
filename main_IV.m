@@ -25,7 +25,7 @@ device.material = silicon_material_properties(T0);
 % physical constants and parameters
 secs1d_physical_constants;
 %NA_array = [5e23,1e23,1e22,1e21,1e20]
-device.doping.NA = 5e23; % [m^3]
+device.doping.NA = 1e20; % [m^3]
 device.doping.ND = 1e23; % [m^3]
 
 % set device geometry
@@ -58,14 +58,14 @@ itercontrol.prev_guess = false;
 % set external voltage here!
 voltage_step = 0.01;      %[V] 
 voltage_start = -0.2;     %[V]
-voltage_end = 1.2; %[V]
+voltage_end = 1.0; %[V]
 
 number_voltages = floor((voltage_end-voltage_start)/voltage_step)+1;
 
 
 % this array stores all voltages for which the currents will be calculated
 %voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
-voltage_ramp = [0, 0.7];
+voltage_ramp = [0, 0.5];
 
 find_zero_voltage = find(voltage_ramp == 0);
 if (find_zero_voltage > 0)
@@ -145,7 +145,7 @@ if length(voltage_ramp) == 2
         axis tight;
         xlim([24.5 25.5]);
         saveas(figure(i),['plots','/charge_density_profiles_V',num2str(voltage_ramp(i)),...
-            '_NA',num2str(device.doping.NA),'exc1.png']);
+            '_NA',num2str(device.doping.NA),'exc2.png']);
         hold off;
         %legend.location = 'northeastoutside';
         %legend show
@@ -171,8 +171,8 @@ if length(voltage_ramp) == 2
         my_legend.Location = 'northeastoutside';    
         axis tight;
         xlim([24.5 25.5]);
-        saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',...
-            num2str(voltage_ramp(i)),'_NA',num2str(device.doping.NA),'exc1.png']);
+        %saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',...
+        %    num2str(voltage_ramp(i)),'_NA',num2str(device.doping.NA),'exc2.png']);
         hold off;
         
         figure(5)
@@ -206,9 +206,9 @@ if length(voltage_ramp) == 2
 
 end
 saveas(figure(5),['plots','/Efield_V',num2str(voltage_ramp(2)),'_NA',...
-    num2str(device.doping.NA),'exc1.png']);
-saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(2)),'_NA',...
-    num2str(device.doping.NA),'exc1.png']);
+    num2str(device.doping.NA),'exc2.png']);
+%saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(2)),'_NA',...
+%    num2str(device.doping.NA),'exc2.png']);
 
 if length(voltage_ramp) ~= 2
     figure(7)
@@ -220,7 +220,7 @@ if length(voltage_ramp) ~= 2
     xlabel('voltage  / V','FontSize', 12);
     ylabel('current density  / A{m^{-2}} ','FontSize', 12); 
     axis tight;
-    saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc1.png']);
+    saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc2.png']);
     hold off;
     
     figure(8)
@@ -234,7 +234,7 @@ if length(voltage_ramp) ~= 2
     ylabel('current density  / A{m^{-2}} ','FontSize', 12); 
     % this plots the current on a logarithmic scale
     set(gca,'yscale','log');
-    saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1.png']);
+    saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc2.png']);
     hold off;
 
 end
