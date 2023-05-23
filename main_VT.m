@@ -24,7 +24,7 @@ close all;
 T0       = 300;     % [K]
 
 % provide a reference current
-current_ref_value = 3.83; % [A/m2] here 100mA/m^2
+current_ref_value = 38.97; % [A/m2] here 100mA/m^2
 
 %secs1d_silicon_material_properties;
 device.material = silicon_material_properties(T0);
@@ -110,7 +110,7 @@ for T_count=1:length(temperatures)
     if (T_count == 1 | T_count == length(temperatures)) 
     figure(1)
         set(1,'Position', [13 700 435 320]);
-        title({'Potential and energy profiles' }); 
+        title({'Potential and energy profiles' },'FontSize', 14); 
         hold on;
         plot(device.mesh.x*plot2micron, profile.psi, 'LineWidth',2,...
              'Color', [0.5*scale 0.2*scale 0],'DisplayName',['{\Psi} /V']); 
@@ -122,31 +122,31 @@ for T_count=1:length(temperatures)
               [0 0 scale]);% ,'DisplayName',['{E_{C}} /eV']); 
         plot(device.mesh.x*plot2micron, profile.Ev, 'LineWidth',1,'Color',...
               [scale 0 0]);% ,'DisplayName',['{E_{V}} /eV']);
-        xlabel('position / {\mu m}');
-        ylabel('potential or energy'); 
+        xlabel('position / {\mu m}','FontSize', 12);
+        ylabel('potential or energy','FontSize', 12); 
         legend(['{\Psi} /V'],['{E_{F,n}} /eV'],['{E_{F,p}} /eV'],...
-               ['{E_{C}} /eV'],['{E_{V}} /eV'])
+               ['{E_{C}} /eV'],['{E_{V}} /eV'],'FontSize', 12)
         my_legend = legend;
         my_legend.Location = 'northeastoutside';    
         axis tight;
-        saveas(figure(1),['plots','/potenergyprofile',num2str(current_ref_value),'Tcount',num2str(T_count),'.png']);
+        saveas(figure(1),['plots','/potenergyprofile',num2str(current_ref_value),'Tcount',num2str(T_count),'exc3.png']);
         hold off;
         
     figure(3)
         set(3,'Position', [490 700 435 320]);
-        title({'Charge carrier density profiles' }); 
+        title({'Charge carrier density profiles' },'FontSize', 14); 
         hold on;
         plot(device.mesh.x*plot2micron, profile.n, 'LineWidth',2,'Color',...
               [0 0 scale]); %,'DisplayName',['n / m{^{-3}}']);
         plot(device.mesh.x*plot2micron, profile.p,'LineWidth',2,'Color',...
               [scale 0 0]); %,'DisplayName',['p / m{^{-3}}']);
         set(gca,'yscale','log');
-        xlabel('position / {\mu m}');
-        ylabel('potential or energy'); 
-        legend(['n / m{^{-3}}'],['p / m{^{-3}}']) 
+        xlabel('position / {\mu m}','FontSize', 12);
+        ylabel('potential or energy','FontSize', 12); 
+        legend(['n / m{^{-3}}'],['p / m{^{-3}}'],'FontSize', 12) 
         my_legend = legend;
         my_legend.Location = 'northeastoutside';
-        saveas(figure(3),['plots','/carrierdensityprofile',num2str(current_ref_value),'Tcount',num2str(T_count),'.png']);
+        saveas(figure(3),['plots','/carrierdensityprofile',num2str(current_ref_value),'Tcount',num2str(T_count),'exc3.png']);
         hold off;
     end; % if 
 end % for temperatures T
@@ -163,22 +163,22 @@ plot(temperatures, target_voltages,'LineWidth',1,'Color',...
          [1 0 0],'DisplayName',...
          ['Voltage @ ',num2str(current_ref_value),' A/m^{2}']);   
 hold on;
-title({'Voltage vs temperature in Si at given j_{ref}' }); 
+title({'Voltage vs temperature in Si at given j_{ref}' },'FontSize', 14); 
 %ylim([min(voltage_int) max(voltage_int)]);
-xlabel('temperature / K');
-ylabel('voltage / V');
+xlabel('temperature / K','FontSize', 12);
+ylabel('voltage / V','FontSize', 12);
 axis tight;
-saveas(figure(5),['plots','/VT',num2str(current_ref_value),'.png']);
+saveas(figure(5),['plots','/VT',num2str(current_ref_value),'exc3.png']);
 
 figure(6)
 set(6,'Position', [490 200 435 320]);
 plot(temperatures(2:end), slope,'LineWidth',1,'Color',...
          [0.8 0 0]); 
 hold on;
-title({'Slope dV/dT vs temperature in Si at given j_{ref}' });
-legend(['slope @ ',num2str(current_ref_value),' A/m^{2}']);
-xlabel('temperature / K');
-ylabel('dV/dT / V/K');
+title({'Slope dV/dT vs temperature in Si at given j_{ref}' },'FontSize', 14);
+legend(['slope @ ',num2str(current_ref_value),' A/m^{2}'],'FontSize', 12);
+xlabel('temperature / K','FontSize', 12);
+ylabel('dV/dT / V/K','FontSize', 12);
 axis tight;
-saveas(figure(6),['plots','/dVdT',num2str(current_ref_value),'.png']);
+saveas(figure(6),['plots','/dVdT',num2str(current_ref_value),'exc3.png']);
 
