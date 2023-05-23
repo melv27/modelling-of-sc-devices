@@ -24,9 +24,9 @@ device.material = silicon_material_properties(T0);
 
 % physical constants and parameters
 secs1d_physical_constants;
-
-device.doping.NA = 1E1; % [m^3]
-device.doping.ND = 1E17; % [m^3]
+%NA_array = [5e23,1e23,1e22,1e21,1e20]
+device.doping.NA = 5e23; % [m^3]
+device.doping.ND = 1e23; % [m^3]
 
 % set device geometry
 device.geometry.length         = 50e-6; % [m]
@@ -56,16 +56,16 @@ itercontrol.pmaxit = 1000;
 itercontrol.prev_guess = false;
 
 % set external voltage here!
-voltage_step = 0;      %[V] 
-voltage_start = 0;     %[V]
-voltage_end = 0; %[V]
+voltage_step = 0.01;      %[V] 
+voltage_start = -0.2;     %[V]
+voltage_end = 1.2; %[V]
 
 number_voltages = floor((voltage_end-voltage_start)/voltage_step)+1;
 
 
 % this array stores all voltages for which the currents will be calculated
-%voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
-voltage_ramp = [1E-17, 0.5];
+voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
+%voltage_ramp = [-0.2, 0];
 
 find_zero_voltage = find(voltage_ramp == 0);
 if (find_zero_voltage > 0)
@@ -136,15 +136,15 @@ if length(voltage_ramp) == 2
         semilogy(device.mesh.x*plot2micron, p_data(:,i), 'LineWidth',2,...
              'Color', [1 0 0]);
         title({['Charge density profiles'],['@ T= ',num2str(T0), ' K', ' and V=', ...
-            num2str(voltage_ramp(i)), ' V']}); 
-        xlabel('position / {\mu m}');
-        ylabel('density / {m^{-3}} '); 
-        legend(['n'], ['p']);
+            num2str(voltage_ramp(i)), ' V']},'FontSize', 14); 
+        xlabel('position / {\mu m}','FontSize', 12);
+        ylabel('density / {m^{-3}} ','FontSize', 12); 
+        legend(['n'], ['p'],'FontSize', 12);
         my_legend = legend;
         my_legend.Location = 'northeastoutside';    
         axis tight;
         saveas(figure(i),['plots','/charge_density_profiles_V',num2str(voltage_ramp(i)),...
-            '_NA',num2str(device.doping.NA),'.png']);
+            '_NA',num2str(device.doping.NA),'exc1.png']);
         hold off;
         %legend.location = 'northeastoutside';
         %legend show
@@ -152,7 +152,7 @@ if length(voltage_ramp) == 2
         figure(i+length(voltage_ramp))
         set(i+length(voltage_ramp),'Position', [13 500 435 320]);
         title({['Energy level diagram'],['@ T= ',num2str(T0), ' K', ' and V=', ...
-            num2str(voltage_ramp(i)), ' V']}); 
+            num2str(voltage_ramp(i)), ' V']},'FontSize', 14); 
         hold on;
         plot(device.mesh.x*plot2micron, EFn_data(:,i),  'LineWidth',2,'Color',...
               [0 0 scale]);
@@ -162,72 +162,102 @@ if length(voltage_ramp) == 2
               [0 0 scale]);
         plot(device.mesh.x*plot2micron, Ev_data(:,i), 'LineWidth',1,'Color',...
               [scale 0 0]);
-        xlabel('position / {\mu m}');
-        ylabel('potential or energy'); 
+        xlabel('position / {\mu m}','FontSize', 12);
+        ylabel('potential or energy','FontSize', 12); 
         legend(['{E_{F,n}} /eV'],['{E_{F,p}} /eV'],...
-               ['{E_{C}} /eV'],['{E_{V}} /eV'])
+               ['{E_{C}} /eV'],['{E_{V}} /eV'],'FontSize', 12)
         my_legend = legend;
         my_legend.Location = 'northeastoutside';    
         axis tight;
         saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',...
-            num2str(voltage_ramp(i)),'_NA',num2str(device.doping.NA),'.png']);
+            num2str(voltage_ramp(i)),'_NA',num2str(device.doping.NA),'exc1.png']);
         hold off;
         
         figure(5)
         set(5,'Position', [1000 500 435 320]);
-        title({['Electric field vs position'],['@ T= ',num2str(T0),' K']}); 
+        title({['Electric field vs position'],['@ T= ',num2str(T0),' K']},'FontSize', 14); 
         hold on;
         plot(device.mesh.x(1:1000)*plot2micron, Efield_data(:,i),  'LineWidth',2,'DisplayName', label1)
         %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
-        xlabel('position / {\mu m}');
-        ylabel('electric field / V/m '); 
+        xlabel('position / {\mu m}','FontSize', 12);
+        ylabel('electric field / V/m ','FontSize', 12); 
         axis tight;
+        legend
         hold off;
-        legend show
+        
         
         figure(6)
         set(6,'Position', [1000 500 435 320]);
-        title({['Electrostatic potential vs position'],['@ T= ',num2str(T0),' K']}); 
+        title({['Electrostatic potential vs position'],['@ T= ',num2str(T0),' K']},'FontSize', 14); 
         hold on;
         plot(device.mesh.x*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label2)
         %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
-        xlabel('position / {\mu m}');
-        ylabel('electrostatic potential / V '); 
+        xlabel('position / {\mu m}','FontSize', 12);
+        ylabel('electrostatic potential / V ','FontSize', 12); 
         axis tight;
+        legend
         hold off;
-        legend show
+        
     end
+
 end
-
 saveas(figure(5),['plots','/Efield_V',num2str(voltage_ramp(2)),'_NA',...
-    num2str(device.doping.NA),'.png']);
+    num2str(device.doping.NA),'exc1.png']);
 saveas(figure(6),['plots','/potential_V',num2str(voltage_ramp(2)),'_NA',...
-    num2str(device.doping.NA),'.png']);
+    num2str(device.doping.NA),'exc1.png']);
 
-figure(7)
-set(7,'Position', [1000 500 435 320]);
-title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
-hold on;
-plot(voltage_ramp, abs(current_ramp))
-legend ('Jtot' );
-xlabel('voltage  / V');
-ylabel('current density  / A{m^{-2}} '); 
-axis tight;
-%saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc1_inf.png']);
-hold off;
+if length(voltage_ramp) ~= 2
+    figure(7)
+    set(7,'Position', [1000 500 435 320]);
+    title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']},'FontSize', 14); 
+    hold on;
+    plot(voltage_ramp, abs(current_ramp))
+    legend ('Jtot','FontSize', 12);
+    xlabel('voltage  / V','FontSize', 12);
+    ylabel('current density  / A{m^{-2}} ','FontSize', 12); 
+    axis tight;
+    saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc1.png']);
+    hold off;
+    
+    figure(8)
+    set(8,'Position', [500 500 435 320]);
+    title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']},'FontSize', 14); 
+    hold on;
+    plot(voltage_ramp, abs(current_ramp),'LineWidth',3);
+    scatter(voltage_ramp, abs(current_ramp));
+    legend ('Jtot','FontSize', 12);
+    xlabel('voltage  / V','FontSize', 12);
+    ylabel('current density  / A{m^{-2}} ','FontSize', 12); 
+    % this plots the current on a logarithmic scale
+    set(gca,'yscale','log');
+    saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1.png']);
+    hold off;
 
-figure(8)
-set(8,'Position', [500 500 435 320]);
-title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
-hold on;
-plot(voltage_ramp, abs(current_ramp),'LineWidth',3);
-scatter(voltage_ramp, abs(current_ramp));
-legend ('Jtot' );
-xlabel('voltage  / V');
-ylabel('current density  / A{m^{-2}} '); 
-%this plots the current on a logarithmic scale
-set(gca,'yscale','log');
-%saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1_inf.png']);
-hold off;
+end
+    % figure(7)
+    % set(7,'Position', [1000 500 435 320]);
+    % title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
+    % hold on;
+    % plot(voltage_ramp, abs(current_ramp))
+    % legend ('Jtot' );
+    % xlabel('voltage  / V');
+    % ylabel('current density  / A{m^{-2}} '); 
+    % axis tight;
+    % saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc1_inf.png']);
+    % hold off;
+    % 
+    % figure(8)
+    % set(8,'Position', [500 500 435 320]);
+    % title({['Current density vs voltage'],['@ T= ',num2str(T0),' K']}); 
+    % hold on;
+    % plot(voltage_ramp, abs(current_ramp),'LineWidth',3);
+    % scatter(voltage_ramp, abs(current_ramp));
+    % legend ('Jtot' );
+    % xlabel('voltage  / V');
+    % ylabel('current density  / A{m^{-2}} '); 
+    % % this plots the current on a logarithmic scale
+    % set(gca,'yscale','log');
+    % saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1_inf.png']);
+    % hold off;
 
 close all;
