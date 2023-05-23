@@ -64,8 +64,8 @@ number_voltages = floor((voltage_end-voltage_start)/voltage_step)+1;
 
 
 % this array stores all voltages for which the currents will be calculated
-voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
-%voltage_ramp = [-0.2, 0];
+%voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
+voltage_ramp = [0, 0.7];
 
 find_zero_voltage = find(voltage_ramp == 0);
 if (find_zero_voltage > 0)
@@ -143,6 +143,7 @@ if length(voltage_ramp) == 2
         my_legend = legend;
         my_legend.Location = 'northeastoutside';    
         axis tight;
+        xlim([24.5 25.5]);
         saveas(figure(i),['plots','/charge_density_profiles_V',num2str(voltage_ramp(i)),...
             '_NA',num2str(device.doping.NA),'exc1.png']);
         hold off;
@@ -169,6 +170,7 @@ if length(voltage_ramp) == 2
         my_legend = legend;
         my_legend.Location = 'northeastoutside';    
         axis tight;
+        xlim([24.5 25.5]);
         saveas(figure(i+length(voltage_ramp)),['plots','/pn_jn_V',...
             num2str(voltage_ramp(i)),'_NA',num2str(device.doping.NA),'exc1.png']);
         hold off;
@@ -182,6 +184,7 @@ if length(voltage_ramp) == 2
         xlabel('position / {\mu m}','FontSize', 12);
         ylabel('electric field / V/m ','FontSize', 12); 
         axis tight;
+        xlim([24.5 25.5]);
         legend
         hold off;
         
@@ -195,6 +198,7 @@ if length(voltage_ramp) == 2
         xlabel('position / {\mu m}','FontSize', 12);
         ylabel('electrostatic potential / V ','FontSize', 12); 
         axis tight;
+        xlim([24.5 25.5]);
         legend
         hold off;
         
@@ -216,7 +220,7 @@ if length(voltage_ramp) ~= 2
     xlabel('voltage  / V','FontSize', 12);
     ylabel('current density  / A{m^{-2}} ','FontSize', 12); 
     axis tight;
-    saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc1_inf.png']);
+    saveas(figure(7),['plots','/current_density_NA',num2str(device.doping.NA),'exc1.png']);
     hold off;
     
     figure(8)
@@ -230,7 +234,7 @@ if length(voltage_ramp) ~= 2
     ylabel('current density  / A{m^{-2}} ','FontSize', 12); 
     % this plots the current on a logarithmic scale
     set(gca,'yscale','log');
-    saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1_inf.png']);
+    saveas(figure(8),['plots','/current_density_log_NA',num2str(device.doping.NA),'exc1.png']);
     hold off;
 
 end

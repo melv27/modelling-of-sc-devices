@@ -64,8 +64,8 @@ number_voltages = floor((voltage_end-voltage_start)/voltage_step)+1;
 
 
 % this array stores all voltages for which the currents will be calculated
-voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
-%voltage_ramp = [-0.2, 0];
+%voltage_ramp = linspace(voltage_start,voltage_end, number_voltages);
+voltage_ramp = [0, 0.7];
 
 find_zero_voltage = find(voltage_ramp == 0);
 if (find_zero_voltage > 0)
@@ -138,6 +138,7 @@ if length(voltage_ramp) == 2
         title({['Charge density profiles'],['@ T= ',num2str(T0), ' K', ' and V=', ...
             num2str(voltage_ramp(i)), ' V']},'FontSize', 14); 
         xlabel('position / {\mu m}','FontSize', 12);
+        xlim([24.7 25.3]);
         ylabel('density / {m^{-3}} ','FontSize', 12); 
         legend(['n'], ['p'],'FontSize', 12);
         my_legend = legend;
@@ -163,6 +164,7 @@ if length(voltage_ramp) == 2
         plot(device.mesh.x*plot2micron, Ev_data(:,i), 'LineWidth',1,'Color',...
               [scale 0 0]);
         xlabel('position / {\mu m}','FontSize', 12);
+        xlim([-0.3 0.3]);
         ylabel('potential or energy','FontSize', 12); 
         legend(['{E_{F,n}} /eV'],['{E_{F,p}} /eV'],...
                ['{E_{C}} /eV'],['{E_{V}} /eV'],'FontSize', 12)
@@ -180,6 +182,7 @@ if length(voltage_ramp) == 2
         plot(device.mesh.x(1:1000)*plot2micron, Efield_data(:,i),  'LineWidth',2,'DisplayName', label1)
         %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
         xlabel('position / {\mu m}','FontSize', 12);
+        xlim([-0.3 0.3]);
         ylabel('electric field / V/m ','FontSize', 12); 
         axis tight;
         legend
@@ -193,6 +196,7 @@ if length(voltage_ramp) == 2
         plot(device.mesh.x*plot2micron, potential_data(:,i),  'LineWidth',2,'DisplayName', label2)
         %legend (['V= ', num2str(voltage_ramp(i)), ' V']);
         xlabel('position / {\mu m}','FontSize', 12);
+        xlim([-0.3 0.3]);
         ylabel('electrostatic potential / V ','FontSize', 12); 
         axis tight;
         legend
